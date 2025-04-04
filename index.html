@@ -1,0 +1,356 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Report Issue / Provide Feedback - Your Inspire IT</title> <!-- Changed Title -->
+    <!-- Link to Font Awesome CDN -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <!-- Link to Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+    <style>
+        /* --- Global Styles & Variables (Theme Consistency) --- */
+        :root {
+            --primary-bg: #eff3ff;
+            --secondary-bg: #ffffff;
+            --tertiary-bg: #f8fafc;
+            --text-dark: #1e293b;
+            --text-light: #475569;
+            --text-lighter: #64748b;
+            --accent-color: #4f46e5;
+            --accent-hover: #4338ca;
+            --border-color: #e2e8f0;
+            --shadow-color: rgba(0, 0, 0, 0.08);
+            --success-color: #10b981;
+            --warning-color: #f59e0b;
+            --danger-color: #ef4444; /* For report emphasis */
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        html { scroll-behavior: smooth; }
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: var(--primary-bg);
+            color: var(--text-dark);
+            line-height: 1.7;
+            font-size: 16px;
+            overflow-x: hidden;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+        main { flex: 1; padding: 60px 0; } /* Main content padding */
+
+        .container { max-width: 1140px; margin: 0 auto; padding: 0 20px; }
+        .container-narrow { max-width: 800px; margin: 0 auto; padding: 0 20px; } /* For the form content */
+
+        h1, h2, h3 { font-weight: 600; color: var(--text-dark); margin-bottom: 0.8em; }
+        h1 { font-size: 2.8rem; line-height: 1.2; }
+        h2 { font-size: 2rem; }
+        h3 { font-size: 1.3rem; }
+        p { margin-bottom: 1em; color: var(--text-light); }
+        a { text-decoration: none; color: var(--accent-color); transition: color 0.3s ease; }
+        a:hover { color: var(--accent-hover); }
+        .section-title { text-align: center; margin-bottom: 40px; } /* Reduced bottom margin */
+        .section-title h2 { margin-bottom: 10px; }
+        .section-title p { max-width: 650px; margin: 0 auto; color: var(--text-lighter); }
+
+        .btn { display: inline-block; background-color: var(--accent-color); color: #fff; padding: 12px 28px; border-radius: 8px; font-weight: 500; font-size: 1rem; transition: background-color 0.3s ease, transform 0.2s ease; border: none; cursor: pointer; text-align: center; width: 100%; }
+        .btn:hover { background-color: var(--accent-hover); transform: translateY(-3px); }
+        .btn.btn-danger { background-color: var(--danger-color); } /* Danger button style */
+        .btn.btn-danger:hover { background-color: #dc2626; } /* Darker danger */
+
+        /* --- Header/Navigation (Same Structure) --- */
+        .main-header { background-color: var(--secondary-bg); padding: 15px 0; box-shadow: 0 2px 10px var(--shadow-color); position: sticky; top: 0; z-index: 1000; border-bottom: 1px solid var(--border-color); }
+        .main-header .container { display: flex; justify-content: space-between; align-items: center; position: relative; }
+        .logo { font-size: 1.5rem; font-weight: 700; color: var(--accent-color); }
+        .main-nav { display: flex; }
+        .main-nav a { margin-left: 25px; font-weight: 500; color: var(--text-dark); position: relative; padding-bottom: 5px; }
+        .main-nav a::after { content: ''; position: absolute; bottom: 0; left: 0; width: 0; height: 2px; background-color: var(--accent-color); transition: width 0.3s ease; }
+        .main-nav a:hover::after, .main-nav a.active-nav::after { width: 100%; }
+        .main-nav a:hover, .main-nav a.active-nav { color: var(--accent-color); }
+        .menu-toggle { display: none; font-size: 1.5rem; cursor: pointer; background: none; border: none; color: var(--text-dark); }
+
+        /* --- Report/Feedback Form Styles --- */
+        #report-feedback-content {
+             background-color: var(--secondary-bg);
+             padding: 40px 50px; /* More padding */
+             border-radius: 12px;
+             box-shadow: 0 10px 30px var(--shadow-color);
+             animation: fadeInScaleUp 0.8s ease-out forwards;
+        }
+
+        .report-form .form-group { margin-bottom: 22px; } /* Slightly more space */
+        .report-form label {
+            display: block;
+            font-weight: 500;
+            margin-bottom: 8px;
+            color: var(--text-dark);
+            font-size: 0.95rem;
+        }
+        /* Style for required fields */
+        .report-form label.required::after {
+             content: ' *';
+             color: var(--danger-color);
+             font-weight: normal;
+             font-size: 1.1em; /* Make asterisk slightly larger */
+        }
+
+        .report-form input[type="text"],
+        .report-form input[type="email"],
+        .report-form input[type="number"],
+        .report-form select,
+        .report-form textarea {
+            width: 100%;
+            padding: 12px 15px;
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            font-size: 1rem;
+            color: var(--text-dark);
+            transition: border-color 0.3s ease, box-shadow 0.3s ease;
+            background-color: var(--tertiary-bg);
+        }
+         /* Specific styling for select dropdown */
+        .report-form select {
+            appearance: none; /* Remove default arrow */
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20' fill='%2364748b'%3E%3Cpath fill-rule='evenodd' d='M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z' clip-rule='evenodd' /%3E%3C/svg%3E"); /* Add custom arrow */
+            background-repeat: no-repeat;
+            background-position: right 15px center;
+            background-size: 1.1em 1.1em;
+            padding-right: 40px; /* Make space for arrow */
+        }
+        /* Handle select focus appearance */
+        .report-form select:focus {
+             background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20' fill='%234f46e5'%3E%3Cpath fill-rule='evenodd' d='M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z' clip-rule='evenodd' /%3E%3C/svg%3E"); /* Change arrow color on focus */
+        }
+
+
+        .report-form input:focus,
+        .report-form select:focus,
+        .report-form textarea:focus {
+            outline: none;
+            border-color: var(--accent-color);
+            box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.15);
+            background-color: var(--secondary-bg);
+        }
+        .report-form textarea {
+             min-height: 150px; /* Taller textarea */
+             resize: vertical;
+        }
+         /* Styling for file input (basic) */
+         .report-form input[type="file"] {
+             padding: 10px 15px; /* Adjust padding */
+             background-color: var(--tertiary-bg);
+             border: 1px dashed var(--border-color); /* Dashed border */
+             cursor: pointer;
+         }
+          .report-form input[type="file"]:hover {
+              border-color: var(--accent-color);
+          }
+
+         .form-note {
+             font-size: 0.85rem;
+             color: var(--text-lighter);
+             margin-top: 5px;
+             display: block;
+         }
+
+        .report-form button[type="submit"] { margin-top: 15px; }
+
+
+        /* --- Footer (Same) --- */
+        .main-footer { background-color: #1e293b; color: #cbd5e1; padding: 50px 0 20px 0; margin-top: auto; }
+        .main-footer .container { /* Standard container */ }
+        .footer-content { display: flex; justify-content: space-between; flex-wrap: wrap; gap: 30px; margin-bottom: 40px; }
+        .footer-col { flex: 1; min-width: 200px; margin-bottom: 20px; }
+        .footer-col h4 { color: #fff; margin-bottom: 20px; font-size: 1.1rem; font-weight: 600; position: relative; padding-bottom: 10px; }
+        .footer-col h4::after { content: ''; position: absolute; left: 0; bottom: 0; width: 40px; height: 2px; background-color: var(--accent-color); }
+        .footer-col ul { list-style: none; }
+        .footer-col ul li { margin-bottom: 12px; }
+        .footer-col ul li a { color: #cbd5e1; transition: color 0.3s ease, padding-left 0.3s ease; }
+        .footer-col ul li a:hover { color: #fff; padding-left:             5px; }
+        .footer-socials a { display: inline-block; color: #fff; background-color: rgba(255, 255, 255, 0.15); width: 40px; height: 40px; line-height: 40px; border-radius: 50%; text-align: center; margin-right: 10px; font-size: 1rem; transition: background-color 0.3s ease, transform 0.3s ease; }
+        .footer-socials a:hover { background-color: var(--accent-color); transform: scale(1.1); }
+        .footer-bottom { border-top: 1px solid #334155; padding-top: 25px; text-align: center; font-size: 0.9rem; color: #94a3b8; }
+        .footer-transparency-note { font-size: 0.85rem; margin-top: 10px; opacity: 0.8; }
+
+
+        /* --- Animations --- */
+        @keyframes fadeInScaleUp { from { opacity: 0; transform: scale(0.95); } to { opacity: 1; transform: scale(1); } }
+        @keyframes fadeInUp { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
+        @keyframes slideDown { from { opacity: 0; transform: translateY(-100%); } to { opacity: 1; transform: translateY(0); } }
+
+
+        /* --- Responsive Design --- */
+        @media (max-width: 992px) {
+            /* Responsive Nav */
+            .menu-toggle { display: block; position: absolute; right: 20px; top: 50%; transform: translateY(-50%); }
+            .main-nav { display: none; flex-direction: column; position: absolute; top: 100%; left: 0; width: 100%; background-color: var(--secondary-bg); padding: 15px 0; box-shadow: 0 4px 10px var(--shadow-color); text-align: center; }
+            .main-nav.active { display: flex; }
+            .main-nav a { margin: 10px 20px; padding: 8px 0; width: auto; }
+            .main-nav a::after { display: none; }
+            .main-nav a:hover { background-color: var(--primary-bg); }
+            #report-feedback-content { padding: 40px; }
+        }
+
+        @media (max-width: 768px) {
+            main { padding: 40px 0; }
+            h2 { font-size: 1.7rem; }
+            .footer-content { text-align: center; }
+            .footer-col { flex-basis: 100%; margin-bottom: 30px; align-items: center; }
+            .footer-col h4::after { left: 50%; transform: translateX(-50%); }
+            .footer-col ul li a:hover { padding-left: 0; }
+            #report-feedback-content { padding: 30px; }
+        }
+
+        @media (max-width: 576px) {
+             body { font-size: 15px; }
+             h2 { font-size: 1.6rem; }
+             .logo { font-size: 1.3rem; }
+             .container { padding: 0 15px; }
+             .container-narrow { padding: 0 15px; }
+             #report-feedback-content { padding: 30px 20px; }
+             .report-form input[type="text"],
+             .report-form input[type="email"],
+             .report-form input[type="number"],
+             .report-form select,
+             .report-form textarea { padding: 10px 12px; font-size: 0.95rem;}
+             .report-form button[type="submit"] { padding: 10px 20px; font-size: 0.95rem; }
+        }
+
+    </style>
+</head>
+<body>
+
+    <!-- Header (Update active link) -->
+    <header class="main-header">
+        <div class="container"> <!-- Standard container -->
+            <a href="index.html" class="logo">Your Inspire IT</a>
+            <button class="menu-toggle" id="menu-toggle" aria-label="Toggle navigation">
+                <i class="fas fa-bars"></i>
+            </button>
+             <nav class="main-nav" id="main-nav">
+                <a href="https://YrInspireIT.github.io/">Home</a>
+                <a href="services.html">About Us</a>
+                <a href="help.html">Contat Us</a>
+               
+                <a href="report.html" class="active-nav">Report/Feedback</a> <!-- Mark page active --> <a href="contact.html">FAQ</a>
+                <a href="auth.html">Login/Sign Up</a>
+            </nav>
+        </div>
+    </header>
+
+    <main>
+        <div class="container-narrow"> <!-- Use narrow container for form focus -->
+            <div class="section-title">
+                <h2>Report an Issue or Provide Feedback</h2>
+                <p>Your input helps us improve Your Inspire IT! Please use this form to report technical problems, issues with tasks, or share your suggestions.</p>
+            </div>
+
+            <div id="report-feedback-content">
+                 <form class="report-form" action="#" method="post" enctype="multipart/form-data"> <!-- Replace #, add enctype for file uploads -->
+
+                    <div class="form-group">
+                        <label for="report-type" class="required">Type of Submission</label>
+                        <select id="report-type" name="report_type" required>
+                            <option value="" disabled selected>-- Select Type --</option>
+                            <option value="bug_report">Bug Report / Technical Issue</option>
+                            <option value="task_issue">Issue with a Specific Task</option>
+                            <option value="payment_issue">Payment or Withdrawal Issue</option>
+                            <option value="feedback_suggestion">General Feedback / Suggestion</option>
+                            <option value="account_issue">Account Related Problem</option>
+                            <option value="other">Other</option>
+                        </select>
+                    </div>
+
+                     <div class="form-group">
+                         <label for="email" class="required">Your Email Address</label>
+                         <input type="email" id="email" name="email" placeholder="So we can follow up if needed" required>
+                         <span class="form-note">Please use the email associated with your Your Inspire IT account, if applicable.</span>
+                     </div>
+
+                    <div class="form-group">
+                        <label for="subject" class="required">Subject</label>
+                        <input type="text" id="subject" name="subject" placeholder="Brief summary of the issue or feedback" required>
+                    </div>
+
+                    <!-- Optional Task ID Field (Show dynamically with JS if needed) -->
+                     <div class="form-group" id="task-id-group" style="display: none;"> <!-- Hidden by default -->
+                        <label for="task-id">Task ID (If applicable)</label>
+                        <input type="number" id="task-id" name="task_id" placeholder="Enter the Task ID number here">
+                        <span class="form-note">Find the Task ID in your task history or on the task details page.</span>
+                     </div>
+
+                    <div class="form-group">
+                        <label for="description" class="required">Detailed Description</label>
+                        <textarea id="description" name="description" rows="6" placeholder="Please provide as much detail as possible. Include steps to reproduce the issue, expected vs. actual results, etc." required></textarea>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="attachment">Attach Screenshot or File (Optional)</label>
+                        <input type="file" id="attachment" name="attachment" accept="image/*,.pdf,.txt,.log"> <!-- Specify accepted file types -->
+                         <span class="form-note">Max file size: 5MB. Accepted formats: JPG, PNG, GIF, PDF, TXT, LOG.</span>
+                    </div>
+
+                    <!-- Change button text based on type? Or keep generic -->
+                     <button type="submit" class="btn btn-danger">Submit Report / Feedback</button> <!-- Use danger color for reports -->
+
+                </form>
+            </div> <!-- End #report-feedback-content -->
+        </div> <!-- End .container-narrow -->
+    </main>
+
+    <!-- Footer (Same Structure) -->
+     <footer class="main-footer">
+        <div class="container"> <!-- Standard container -->
+            <div class="footer-content">
+                <!-- Footer columns -->
+                 <div class="footer-col"><h4>About Us</h4><ul><li><a href="#">Our Mission</a></li><li><a href="#">How it Works</a></li><li><a href="#">Blog</a></li></ul></div>
+                 <div class="footer-col"><h4>Support</h4><ul><li><a href="#">Help Center / FAQ</a></li><li><a href="#">Contact Us</a></li><li><a href="#">Report</a></li><li><a href="#">Payment Info</a></li></ul></div>
+                 <div class="footer-col"><h4>Legal & Transparency</h4><ul><li><a href="#">Terms of Service</a></li><li><a href="#">Privacy Policy</a></li><li><a href="#">Cookie Policy</a></li><li><a href="#">Earning Disclaimer</a></li></ul></div>
+                 <div class="footer-col" style="display: none;"><h4>Connect With Us</h4><div class="footer-socials"><a href="#" aria-label="Facebook"><i class="fab fa-facebook-f"></i></a><a href="#" aria-label="Twitter"><i class="fab fa-twitter"></i></a><a href="#" aria-label="LinkedIn"><i class="fab fa-linkedin-in"></i></a><a href="#" aria-label="Instagram"><i class="fab fa-instagram"></i></a></div></div>
+            </div>
+            <div class="footer-bottom">
+                 © 2022-2025 Your Inspire IT. All Rights Reserved.
+               
+            </div>
+        </div>
+     </footer>
+
+    <script>
+        // --- Mobile Menu Toggle ---
+        const menuToggle = document.getElementById('menu-toggle');
+        const mainNav = document.getElementById('main-nav');
+        if (menuToggle && mainNav) {
+            menuToggle.addEventListener('click', () => {
+                mainNav.classList.toggle('active');
+                const icon = menuToggle.querySelector('i');
+                icon.classList.toggle('fa-bars');
+                icon.classList.toggle('fa-times');
+            });
+        }
+
+        // --- Show/Hide Task ID Field based on Report Type ---
+        const reportTypeSelect = document.getElementById('report-type');
+        const taskIdGroup = document.getElementById('task-id-group');
+
+        if (reportTypeSelect && taskIdGroup) {
+            reportTypeSelect.addEventListener('change', function() {
+                // Show Task ID field only if 'Issue with a Specific Task' is selected
+                if (this.value === 'task_issue') {
+                    taskIdGroup.style.display = 'block';
+                } else {
+                    taskIdGroup.style.display = 'none';
+                }
+            });
+        }
+
+        // Form submission requires backend handling
+
+    </script>
+
+</body>
+</html>
